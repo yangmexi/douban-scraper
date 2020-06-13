@@ -1,12 +1,19 @@
+import sys
+
 import pandas as pd
 
-from scraper import DoubanPaser
+from scraper import DoubanParser
 
 if __name__ == "__main__":
     # TODO: change to sys argv
     uid = "35086050"
-    status = "collect"
-    douban_parser = DoubanPaser(uid)
-    resp = douban_parser.parse_movies(status)
-    movies = pd.DataFrame(resp)
-    movies.to_csv(f"movies_{status}.csv", index=False)
+    section = "movie"
+    status = ["do", "wish", "collect"]
+    douban_parser = DoubanParser(uid)
+    for s in status:
+        resp = douban_parser.parse_page(section, s)
+        if resp is None:
+            print(f"{s}_{section} page is empty!")
+            continue
+        catalog = pd.DataFrame(resp)
+        catalog.to_csv(f"{section}_{s}.csv", index=False)

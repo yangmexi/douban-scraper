@@ -3,7 +3,10 @@ from bs4 import BeautifulSoup
 
 def page_number(html):
     soup = BeautifulSoup(html, "lxml")
-    return int(soup.find("div", class_="paginator").find_all("a")[-2].text)
+    paginator = soup.find("div", class_="paginator")
+    if paginator is None:
+        return 0
+    return int(paginator.find_all("a")[-2].text)
 
 
 def parse_text(bs4_tag, option=None):
@@ -29,12 +32,15 @@ def parse_rating(rating_tag):
 def parse_movie_page(html):
     """
     :param html:
-    :return:
+    :return: list of items if the page is not empty, otherwise return None value.
     """
     soup = BeautifulSoup(html, 'lxml')
     content = []
     listing = soup.find("div", class_="grid-view")
-    for m in listing.find_all("div", class_="item"):
+    items = listing.find_all("div", class_="item")
+    if len(items) == 0:
+        return None
+    for m in items:
         comp = [res for res in m.find_all("li")]
         if len(comp) == 4:
             title, cast, ratings, comment = comp
@@ -61,4 +67,25 @@ def parse_movie_page(html):
             "comment": comment
         }
         content.append(item)
+    return content
+
+
+def parse_book_page(html):
+    """
+    parse douban book page
+    :param html: html text format page
+    :return: a list of items, each item is a key-value map
+    """
+    content = []
+    return content
+
+
+def parse_game_page(html):
+    """
+    parse douban game page
+    :param html: html text format page
+    :return: a list of items, each item is a key-value map
+    """
+    # TODO: implement parse_game_page
+    content = []
     return content

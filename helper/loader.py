@@ -31,7 +31,7 @@ def gen_url(uid, category, status, page):
 
 
 def page(url, s=None):
-    time.sleep(7)
+    time.sleep(conf.SLEEP_TIME)
     try:
         resp = requests.get(url, headers=conf.HEADER)
         if resp.status_code == 200:
