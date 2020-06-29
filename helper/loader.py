@@ -20,14 +20,14 @@ def gen_url(uid, category, status, page):
 
     postfix = ""
     if page != 0:
-        postfix = f"?start={(page)*conf.ITEM_PER_PAGE}"
+        postfix = f"start={(page)*conf.ITEM_PER_PAGE}"
 
     if category == "movie":
-        return f"https://movie.douban.com/people/{uid}/{status}" + postfix
+        return f"https://movie.douban.com/people/{uid}/{status}?" + postfix
     if category == "book":
-        return f"https://book.douban.com/people/{uid}/{status}" + postfix
+        return f"https://book.douban.com/people/{uid}/{status}?" + postfix
     if category == "game":
-        return f"https://www.douban.com/people/{uid}/games?action={status}" + postfix
+        return f"https://www.douban.com/people/{uid}/games?action={status}&" + postfix
 
 
 def page(url, s=None):

@@ -19,7 +19,6 @@ class DoubanParser:
     def parse_page(self, section: str, status: str):
         if status not in ["collect", "wish", "do"]:
             raise ValueError("[Error] Wrong status!")
-        # TODO: deal wth empty page
         s_values = []
         p = loader.content(self.poi, section, status, 0)
         num_page = parser.page_number(p)

@@ -12,7 +12,9 @@ def page_number(html):
 def parse_text(bs4_tag, option=None):
     if option == "title":
         return bs4_tag.text.strip().split("\n")[0]
-    return bs4_tag.text.strip()
+    if bs4_tag is not None:
+        return bs4_tag.text.strip()
+    return ''
 
 
 def parse_rating(rating_tag):
@@ -87,5 +89,32 @@ def parse_game_page(html):
     :return: a list of items, each item is a key-value map
     """
     # TODO: implement parse_game_page
+    soup = BeautifulSoup(html, 'lxml')
     content = []
+    game_list = soup.find("div", class_="game-list")
+    items = game_list.find_all("div", class_="common-item")
+    if len(items) == 0:
+        return None
+    for m in items:
+        tags = None
+        star = None
+        rec = None
+        link = m.find("div", class_ = "title").find("a")["href"]
+        title = parse_text(m.find(class_="title"))
+        tags = parse_text(m.find(class_="tags"))
+        if len(tags) > 0:
+            tags = tags[4:].split(" ")
+        rec = parse_text(m.find(class_="date"))
+        star = m.find("span").attrs["class"][-1][7]
+        comment = parse_text(m.find_all("div")[5])
+        item = {
+            "link": link,
+            "title": title,
+            "tag": tags,
+            "date": rec,
+            "star": star,
+            "comment": comment
+        }
+        content.append(item)
+
     return content
